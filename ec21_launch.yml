@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  vars:
+   sg: sandeep_abbadi
+  tasks:
+   - name: creating sg
+     ec2_group:
+      name: "{{ sg }}"
+      description: allow ssh
+      region: us-west-1
+      rules:
+        - proto: tcp
+          from_port: 80
+          to_port: 80
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: 0.0.0.0/0
+   - name: launching ec2 instance
+     ec2:
+      key_name: available
+      instance_type: t2.micro
+      image: ami-01fee56b22f308154
+      region: us-west-2
+      group: "{{ sg }}"
